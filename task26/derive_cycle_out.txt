@@ -1,0 +1,6 @@
+n=2 tested=1 mismatch=0
+n=3 tested=4 mismatch=0
+n=4 tested=41 mismatch=0
+n=5 tested=768 mismatch=0
+n=6 tested=27449 mismatch=0
+n=7 tested=1887284 mismatch=0

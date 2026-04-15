@@ -1,0 +1,11 @@
+n=2 fail_s=0 fail_sr=0 fail_ssr=0 fail_post=0 fail_rec=0
+n=3 fail_s=0 fail_sr=0 fail_ssr=0 fail_post=2531 fail_rec=0
+n=4 fail_s=0 fail_sr=0 fail_ssr=0 fail_post=3283 fail_rec=0
+n=5 fail_s=3379 fail_sr=1665 fail_ssr=1665 fail_post=4392 fail_rec=582
+n=6 fail_s=2909 fail_sr=2909 fail_ssr=2909 fail_post=4721 fail_rec=1613
+n=7 fail_s=4702 fail_sr=3823 fail_ssr=3823 fail_post=4852 fail_rec=2566
+n=8 fail_s=4374 fail_sr=4374 fail_ssr=4374 fail_post=4954 fail_rec=3332
+n=9 fail_s=4959 fail_sr=4665 fail_ssr=4665 fail_post=4979 fail_rec=3943
+n=10 fail_s=4857 fail_sr=4857 fail_ssr=4857 fail_post=4997 fail_rec=4338
+n=11 fail_s=4996 fail_sr=4940 fail_ssr=4940 fail_post=4998 fail_rec=4623
+n=12 fail_s=4978 fail_sr=4978 fail_ssr=4978 fail_post=4999 fail_rec=4790
