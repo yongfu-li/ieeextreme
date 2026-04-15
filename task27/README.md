@@ -12,44 +12,48 @@ Goal: minimize the time when all readers have finished.
 
 ## Core Idea
 
-Assume professors are scheduled in one "professor phase" that starts at time `S`.
-For a fixed `S`:
+Sort professors and students by arrival time.
 
-1. Compute the earliest finishing time `E(S)` for all professors (work-conserving simulation with release times).
-2. Each student either:
-   - finishes before `S` if `arrival + duration <= S`, or
-   - must finish after professors: `max(arrival, E(S)) + duration`.
-3. The makespan for that `S` is the maximum completion among all professors/students.
+For students, remove dominated entries:
 
-We evaluate only candidate values of `S` where the objective can change:
+- if a previous student has smaller or equal duration than a later one, the previous one is never critical for the makespan.
+- after this compression, student durations are strictly decreasing.
 
-- professor arrivals `r_i` and `r_i - 1`
-- student thresholds `(a_j + t_j)` and `(a_j + t_j - 1)`
-- `0`
+Then use dynamic programming:
 
-Then take the minimum makespan across candidates.
+- `dp[i][j][0]`: minimum finishing time after placing first `i` professors and first `j` useful students, with the `i`-th professor placed last.
+- `dp[i][j][1]`: same, with the `j`-th student placed last.
+
+Transitions:
+
+- professor last:
+  - `max(dp[i-1][j][0], prof[i].arrival) + prof[i].duration`
+  - `max(dp[i-1][j][1], prof[i].arrival) + prof[i].duration`
+- student last:
+  - `max(dp[i][j-1][0], stud[j].arrival) + stud[j].duration`
+  - `max(dp[i][j-1][1], stud[j].arrival + stud[j].duration)`
+
+The second student-to-student transition works because compressed student durations are decreasing, so overlapping with the previous student remains valid.
 
 ## Correctness Intuition
 
-- For fixed `S`, professors should be scheduled without intentional idle time whenever a professor is available; this minimizes professor completion time `E(S)`.
-- Students do not block each other, so each student can be treated independently:
-  - either fully before professor phase,
-  - or after professors finish.
-- The global completion time for fixed `S` is therefore exactly the max of these independent completion times.
-- The makespan function only changes when crossing arrival/threshold boundaries, so checking those boundary candidates is sufficient.
+- Professors can be considered in arrival order; when a professor can start, delaying them only postpones exclusive-book time and cannot improve the optimum.
+- Students can be considered in arrival order; if an earlier student has duration `<=` a later one, it can always be started together with that later student without worsening the result.
+- After compression, each DP state captures all necessary information (how many of each type were placed and which type was placed last).
+- Each transition enforces constraints exactly:
+  - professors cannot overlap anyone,
+  - students cannot overlap professors but may overlap students.
+- Therefore, DP computes the optimal feasible schedule.
 
 ## Complexity
 
 Let `N` be professors and `M` be students.
 
-- Number of candidate start times: `O(N + M)`
-- For each candidate:
-  - professor simulation: `O(N)`
-  - student scan: `O(M)`
+- sorting: `O(N log N + M log M)`
+- student compression: `O(M)`
+- DP: `O(N * M')`, where `M' <= M`
 
-Total: `O((N + M)^2)` time, `O(N + M)` memory.
-
-With `N, M <= 3000`, this is efficient enough.
+Overall: `O(N * M)` time, `O(N * M)` memory, which fits `N, M <= 3000`.
 
 ## Build
 
